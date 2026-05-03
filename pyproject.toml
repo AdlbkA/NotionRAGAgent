@@ -1,0 +1,19 @@
+[project]
+name = "notionmcp"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "anthropic>=0.97.0",
+    "chromadb>=1.5.8",
+    "fastapi>=0.136.1",
+    "llama-index>=0.14.21",
+    "llama-index-embeddings-huggingface>=0.7.0",
+    "llama-index-vector-stores-chroma>=0.5.5",
+    "mcp>=1.27.0",
+    "pydantic-settings>=2.14.0",
+    "python-dotenv>=1.2.2",
+    "sentence-transformers>=5.4.1",
+    "uvicorn>=0.46.0",
+]
