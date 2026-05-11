@@ -8,6 +8,7 @@ NotionMCP is an integration of Notion with LLM that enables:
 - Synchronize documents from Notion to a vector database
 - Perform semantic search on indexed content
 - Answer questions using context from Notion (RAG)
+- Create pages based on user requirements
 - Interact via REST API
 
 The system uses Model Context Protocol (MCP) for secure connection to the Notion API and ChromaDB for storing vector embeddings.
