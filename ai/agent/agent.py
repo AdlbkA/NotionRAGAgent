@@ -20,6 +20,28 @@ class Agent:
             )
         elif tool_name == "search_notion":
             return await self._notion.search(query=tool_input["query"])
+        elif tool_name == "append_notion_content":
+            return await self._notion.append_content(
+                content=tool_input["content"],
+                page_id=tool_input["page_id"]
+            )
+        elif tool_name == "rename_notion_page":
+            return await self._notion.rename_page(
+                title=tool_input["title"],
+                page_id=tool_input["page_id"]
+            )
+        elif tool_name == 'edit_notion_content':
+            await self._notion.clear_page_content(
+                page_id=tool_input["page_id"]
+            )
+            return await self._notion.append_content(
+                content=tool_input["content"],
+                page_id=tool_input["page_id"]
+            )
+        elif tool_name == "delete_notion_page":
+            return await self._notion.delete_block(
+                block_id=tool_input["page_id"]
+            )
         return "Инструмент не найден"
 
     async def chat(self, user_message: str) -> str:

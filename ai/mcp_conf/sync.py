@@ -19,7 +19,7 @@ async def sync_notion_to_rag(retriever: Retriever, query: str = ""):
         data = json.loads(raw)
         results = data.get('results', [])
     except Exception:
-        log.info('Ошибка парсинга Notion:', raw)
+        log.warning(f'Ошибка парсинга Notion: {raw}')
         return
     
     pages = []
@@ -28,15 +28,18 @@ async def sync_notion_to_rag(retriever: Retriever, query: str = ""):
         page_id = item.get("id", "")
         title = extract_title(item)
 
-
-        if obj_type == "data_source":
-            log.info(f"  ⏭ Пропускаем БД: {title}")
+        if obj_type != "page":
+            log.info(f"  ⏭ Пропускаем {obj_type}: {title}")
             continue
 
-        
-        blocks_raw = await notion.get_page_content(page_id)
-        blocks_data = json.loads(blocks_raw)
-        block_results = blocks_data.get("results", [])
+        try:
+            blocks_raw = await notion.get_page_content(page_id)
+            blocks_data = json.loads(blocks_raw)
+            block_results = blocks_data.get("results", [])
+        except Exception as e:
+            log.warning(f"  ⚠ Не удалось получить контент {title} ({page_id}): {e}")
+            continue
+
         if block_results:
             content = extract_text_from_blocks(block_results)
         else:

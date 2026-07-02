@@ -1,8 +1,11 @@
 import os
 import json
+import logging
 from mcp import ClientSession
 from mcp.client.stdio import StdioServerParameters, stdio_client
 from config.settings import settings
+
+log = logging.getLogger(name=__name__)
 
 class NotionMCPClient:
     
@@ -59,5 +62,45 @@ class NotionMCPClient:
                 }
             ]
         })
+
+    async def rename_page(self, title: str, page_id: str) -> str:
+        return await self._call("API-patch-page", {
+            'page_id': page_id,
+            'properties': {
+                'title': {
+                    'title': [{'text': {'content': title}}]
+                }
+            }
+        })
+
+    async def append_content(self, content: str, page_id: str) -> str:
+        return await self._call("API-patch-block-children", {
+            'block_id': page_id,
+            'children': [
+                {
+                    'object': 'block',
+                    'type': 'paragraph',
+                    'paragraph': {
+                        'rich_text': [
+                            {
+                                'type': 'text',
+                                'text': {'content': content}
+                            }
+                        ]
+                    }
+                }
+            ]
+        })
+
+    async def delete_block(self, block_id: str) -> str:
+        return await self._call("API-delete-a-block", {
+            'block_id': block_id
+        })
+
+    async def clear_page_content(self, page_id: str) -> None:
+        raw = await self.get_page_content(block_id=page_id)
+        children = json.loads(raw).get('results', [])
+        for block in children:
+            await self.delete_block(block_id=block['id'])
 
 notion = NotionMCPClient()
