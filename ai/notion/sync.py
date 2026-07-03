@@ -1,8 +1,7 @@
 import json
 import asyncio
 import logging
-from config.settings import settings as cfg
-from ai.mcp_conf.notion_client import notion
+from ai.notion.client import notion
 from ai.rag.indexer import Indexer
 from ai.rag.retriever import Retriever
 
@@ -11,7 +10,7 @@ log = logging.getLogger(name=__name__)
 
 async def sync_notion_to_rag(retriever: Retriever, query: str = ""):
     indexer = Indexer(retriever)
-    
+
     log.info("Fetching pages from Notion...")
     raw = await notion.search(query)
 
@@ -21,7 +20,7 @@ async def sync_notion_to_rag(retriever: Retriever, query: str = ""):
     except Exception:
         log.warning(f'Ошибка парсинга Notion: {raw}')
         return
-    
+
     pages = []
     for item in results:
         obj_type = item.get("object", "")
@@ -111,4 +110,4 @@ def extract_content_from_properties(item: dict) -> str:
 
 if __name__ == "__main__":
     retriever = Retriever()
-    asyncio.run(sync_notion_to_rag())
+    asyncio.run(sync_notion_to_rag(retriever))

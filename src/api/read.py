@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
-from ai.mcp_conf.sync import sync_notion_to_rag
+from ai.notion.sync import sync_notion_to_rag
 from ai.rag.retriever import Retriever
 from ai.agent.agent import Agent
 

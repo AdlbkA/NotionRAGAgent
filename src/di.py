@@ -1,6 +1,6 @@
 from dishka import Provider, Scope, provide, AsyncContainer, make_async_container
 from dishka.integrations.fastapi import FastapiProvider
-from ai.mcp_conf.notion_client import NotionMCPClient
+from ai.notion.client import NotionClient
 from ai.rag.retriever import Retriever
 from ai.rag.indexer import Indexer
 from ai.agent.agent import Agent
@@ -14,19 +14,19 @@ class AppProvider(Provider):
         return Settings()
     
     @provide
-    def notion_client(self) -> NotionMCPClient:
-        return NotionMCPClient()
-    
+    def notion_client(self) -> NotionClient:
+        return NotionClient()
+
     @provide
     def retriever(self) -> Retriever:
         return Retriever()
-    
+
     @provide
     def indexer(self, retriever: Retriever) -> Indexer:
         return Indexer(retriever)
-    
+
     @provide
-    def agent(self, retriever: Retriever, notion: NotionMCPClient) -> Agent:
+    def agent(self, retriever: Retriever, notion: NotionClient) -> Agent:
         return Agent(retriever, notion)
     
 def setup_providers() -> list[Provider]:

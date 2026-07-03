@@ -2,11 +2,11 @@ import anthropic
 from config.settings import settings
 from ai.rag.retriever import Retriever
 from ai.agent.prompts import SYSTEM_PROMPT
-from ai.mcp_conf.notion_client import NotionMCPClient
+from ai.notion.client import NotionClient
 from ai.agent.tools import NOTION_TOOLS
 
 class Agent:
-    def __init__(self, retriever: Retriever, notion: NotionMCPClient):
+    def __init__(self, retriever: Retriever, notion: NotionClient):
         self._retriever = retriever
         self._notion = notion
         self._client = anthropic.Anthropic(api_key=settings.anthropic_api_key)

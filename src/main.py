@@ -8,7 +8,7 @@ from datetime import datetime
 from src.di import setup_http_di
 from src.api.read import router as read_router
 from ai.rag.retriever import Retriever
-from ai.mcp_conf.sync import sync_notion_to_rag
+from ai.notion.sync import sync_notion_to_rag
 
 
 
@@ -38,7 +38,7 @@ logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
 )    
 
-app = FastAPI(title="NotionMCPAgent", lifespan=lifespan)
+app = FastAPI(title="NotionRAGAgent", lifespan=lifespan)
 
 setup_dishka(container, app)
 
@@ -49,4 +49,4 @@ async def health_check():
     return {'status': 'OK'}
 
 if __name__ == '__main__':
-    uvicorn.run('src.app:app', host='0.0.0.0', port=8000, reload=True)
+    uvicorn.run('src.main:app', host='0.0.0.0', port=8000, reload=True)

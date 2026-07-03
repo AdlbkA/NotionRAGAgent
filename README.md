@@ -1,17 +1,17 @@
-# NotionMCP
+# NotionRAGAgent
 
-RAG (Retrieval Augmented Generation) system for interacting with Notion via Model Context Protocol and Claude AI.
+RAG (Retrieval Augmented Generation) system for interacting with Notion via the Notion REST API and Claude AI.
 
 ## Overview
 
-NotionMCP is an integration of Notion with LLM that enables:
+NotionRAGAgent is an integration of Notion with LLM that enables:
 - Synchronize documents from Notion to a vector database
 - Perform semantic search on indexed content
 - Answer questions using context from Notion (RAG)
 - Create pages based on user requirements
 - Interact via REST API
 
-The system uses Model Context Protocol (MCP) for secure connection to the Notion API and ChromaDB for storing vector embeddings.
+The system talks directly to the Notion REST API for reading and writing pages and uses ChromaDB for storing vector embeddings.
 
 ## Tech Stack
 
@@ -21,7 +21,7 @@ The system uses Model Context Protocol (MCP) for secure connection to the Notion
 - **LlamaIndex** — indexing and search framework
 - **ChromaDB** — vector database
 - **Sentence Transformers** — embeddings generation
-- **MCP (Model Context Protocol)** — Notion integration
+- **Notion REST API** — Notion integration (via `httpx`)
 
 ## Project Structure
 
@@ -32,8 +32,8 @@ The system uses Model Context Protocol (MCP) for secure connection to the Notion
 │   │   ├── agent.py       # Main agent logic with Claude
 │   │   ├── prompts.py     # System prompts
 │   │   └── tools.py       # Agent tools and utilities
-│   ├── mcp_conf/          # MCP configuration and integration
-│   │   ├── notion_client.py # Client for Notion API via MCP
+│   ├── notion/            # Notion REST API integration
+│   │   ├── client.py      # Client for the Notion REST API
 │   │   └── sync.py        # Notion → RAG synchronization
 │   └── rag/               # RAG (Retrieval Augmented Generation)
 │       ├── embeddings.py  # Embeddings generation model
@@ -65,7 +65,7 @@ The system uses Model Context Protocol (MCP) for secure connection to the Notion
 1. **Clone the repository:**
 ```bash
 git clone <repository-url>
-cd NotionMCP
+cd NotionRAGAgent
 ```
 
 2. **Install dependencies:**
@@ -143,7 +143,7 @@ curl -X POST http://localhost:8000/chat \
 
 1. **Synchronization (Sync)**
    ```
-   Notion API (MCP) → NotionMCPClient
+   Notion REST API → NotionClient
    → Documents [id, title, content]
    → LlamaIndex: Document objects
    → Embeddings (Sentence Transformers)
@@ -186,5 +186,5 @@ HF_TOKEN=
 
 ### Notion API errors
 - Verify that `NOTION_TOKEN` is correct
-- Ensure the Notion MCP server is installed (`npm install -g @notionhq/notion-mcp-server`)
-- Check that the integration has access permissions in your Notion workspace
+- Check that the integration has access permissions in your Notion workspace (share the pages/databases with your integration)
+- If needed, override the API version via `NOTION_VERSION` (defaults to `2022-06-28`)
